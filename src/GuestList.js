@@ -1,4 +1,8 @@
+/** @jsxImportSource @emotion/react */
+
 import { useEffect, useState } from 'react';
+import { guestListName } from './AppStyle';
+import { guestNames } from './GuestNames';
 
 export default function GuestList() {
   const [firstName, setFirstName] = useState('');
@@ -6,27 +10,30 @@ export default function GuestList() {
 
   return (
     <div>
-      <div>
-        <label for="First name">
-          First Name
-          <input
-            // Connect state variable to input value
-            value={firstName}
-            // Update state variable with new value (text user types in)
-            onInput={(e) => setFirstName(e.target.value)}
-          />
-        </label>
-      </div>
-      <div>
-        <label for="Last name">
-          Last Name
-          <input
-            // Connect state variable to input value
-            value={lastName}
-            // Update state variable with new value (text user types in)
-            onInput={(e) => setLastName(e.target.value)}
-          />
-        </label>
+      <div className={guestListName}>
+        <div>
+          <label for="First name">
+            First Name{' '}
+            <input
+              // Connect state variable to input value
+              value={firstName}
+              // Update state variable with new value (text user types in)
+              onInput={(e) => setFirstName(e.target.value)}
+            />
+          </label>
+        </div>
+        <br />
+        <div>
+          <label for="Last name">
+            Last Name{' '}
+            <input
+              // Connect state variable to input value
+              value={lastName}
+              // Update state variable with new value (text user types in)
+              onInput={(e) => setLastName(e.target.value)}
+            />
+          </label>
+        </div>
       </div>
     </div>
   );
