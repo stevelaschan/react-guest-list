@@ -6,23 +6,34 @@ function List(props) {
 }
 
 export default function MainList() {
-  const guestInfo = [
-    {
-      name: {
-        first: 'Stefan',
-        last: 'Laschan',
-      },
-      attending: false,
-    },
-  ];
+  // const guestInfo = [
+  //   {
+  //     name: {
+  //       first: 'Stefan',
+  //       last: 'Laschan',
+  //     },
+  //     attending: false,
+  //   },
+  // ];
 
-  const [guestList, setGuestList] = useState(guestInfo);
+  const [guestList, setGuestList] = useState([]);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
 
   return (
     <div>
       <List>
+        <div>
+          <input
+            value={firstName}
+            onInput={(e) => setFirstName(e.target.value)}
+          />
+          <input
+            value={lastName}
+            onInput={(e) => setLastName(e.target.value)}
+          />
+        </div>
+
         {guestList.map((singleGuest) => {
           return (
             <GuestListInfo
@@ -40,8 +51,8 @@ export default function MainList() {
             ...guestListCopy,
             {
               name: {
-                first: 'Richard',
-                last: 'Korn',
+                first: { firstName },
+                last: { lastName },
               },
               attending: true,
             },
