@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { guestListName } from './AppStyle';
-import { guestNames } from './GuestNames';
 
-export default function GuestList() {
+export default function FirstLastName() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
 
