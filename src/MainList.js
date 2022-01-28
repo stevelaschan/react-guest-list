@@ -39,41 +39,39 @@ export default function MainList() {
             <GuestListInfo
               key={singleGuest.name}
               name={singleGuest.name}
-              attending={false}
+              attending={singleGuest.attending}
             />
           );
         })}
-      </List>
-      <button
-        onClick={() => {
-          const guestListCopy = [...guestList];
-          const guestListUpdated = [
-            ...guestListCopy,
-            {
-              name: {
-                first: { firstName },
-                last: { lastName },
-              },
-              attending: true,
-            },
-          ];
-          setGuestList(guestListUpdated);
-        }}
-      >
-        {' '}
-        add guest
-      </button>
-      <div>
         <button
           onClick={() => {
-            const guestListCopy = [...guestList];
-            guestListCopy.pop();
-            setGuestList(guestListCopy);
+            const guestListAdded = [
+              ...guestList,
+              {
+                name: {
+                  first: { firstName },
+                  last: { lastName },
+                },
+                attending: true,
+              },
+            ];
+            setGuestList(guestListAdded);
           }}
         >
-          remove guest
+          {' '}
+          add guest
         </button>
-      </div>
+        <div>
+          <button
+            onClick={() => {
+              const guestListRemoved = guestList.pop();
+              setGuestList(guestListRemoved);
+            }}
+          >
+            remove guest
+          </button>
+        </div>
+      </List>
     </div>
   );
 }
