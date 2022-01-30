@@ -38,7 +38,7 @@ export default function MainGuestList() {
           }),
         },
       );
-
+      const createdGuest = await response.json();
       window.location.reload(false);
     }
 
@@ -49,21 +49,18 @@ export default function MainGuestList() {
   const [checkbox, setCheckbox] = useState({});
 
   // Object.keys() returns an array with the values of the object as strings
-  const checkboxKeys = Object.keys(checkbox);
+  // const checkboxKeys = Object.keys(checkbox);
 
   // when Delete button is clicked:
-  function handleDelete() {
-    async function deleteGuest() {
-      const response = await fetch(
-        `http://upleveled-guest-list.herokuapp.com/guests/${checkboxKeys}`,
-        {
-          method: 'DELETE',
-        },
-      );
-
-      window.location.reload(false);
-    }
-    deleteGuest();
+  async function deleteGuest() {
+    const response = await fetch(
+      `http://upleveled-guest-list.herokuapp.com/guests/1`,
+      {
+        method: 'DELETE',
+      },
+    );
+    const deletedGuest = await response.json();
+    window.location.reload(false);
   }
 
   return (
@@ -89,17 +86,12 @@ export default function MainGuestList() {
                 value={isAttending}
                 defaultChecked={isAttending}
                 onChange={() => {
-                  setIsAttending(
-                    isAttending ? (
-                      <div>attending</div>
-                    ) : (
-                      <div>not attending</div>
-                    ),
-                  );
+                  setIsAttending(!isAttending);
                 }}
               />
+              {!isAttending ? <div>attending</div> : <div>not attending</div>}
             </td>
-            <td>
+            {/* <td>
               <input
                 type="checkbox"
                 defaultChecked={checkbox[singleGuest.id]}
@@ -107,9 +99,9 @@ export default function MainGuestList() {
                   setCheckbox({ ...checkbox, [singleGuest.id]: true });
                 }}
               />
-            </td>
+            </td> */}
             <td>
-              <button onClick={() => handleDelete(singleGuest.id)}>
+              <button onClick={() => deleteGuest(singleGuest.id)}>
                 remove
               </button>
             </td>
