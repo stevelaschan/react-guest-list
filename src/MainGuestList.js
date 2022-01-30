@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { guestListName } from './AppStyle';
 
 export default function MainGuestList() {
   const [guestList, setGuestList] = useState([]);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [isAttending, setIsAttending] = useState(false);
 
   // fetch guest info from the api
   useEffect(() => {
@@ -38,8 +38,6 @@ export default function MainGuestList() {
           }),
         },
       );
-      // eslint-disable-next-line no-unused-vars
-      const createdGuest = await response.json();
 
       window.location.reload(false);
     }
@@ -54,7 +52,7 @@ export default function MainGuestList() {
   const checkboxKeys = Object.keys(checkbox);
 
   // when Delete button is clicked:
-  function handleDelete(id) {
+  function handleDelete() {
     async function deleteGuest() {
       const response = await fetch(
         `http://upleveled-guest-list.herokuapp.com/guests/${checkboxKeys}`,
@@ -62,8 +60,6 @@ export default function MainGuestList() {
           method: 'DELETE',
         },
       );
-      // eslint-disable-next-line no-unused-vars
-      const deletedGuest = await response.json();
 
       window.location.reload(false);
     }
@@ -84,13 +80,25 @@ export default function MainGuestList() {
       </form>
       <tbody>
         {guestList.map((singleGuest) => (
-          <tr
-            key={singleGuest.id}
-            className={singleGuest.attending ? 'notAttending' : 'attending'}
-            data-test-id="guest"
-          >
+          <tr key={singleGuest.id} data-test-id="guest">
             <td>{singleGuest.firstName}</td>
             <td>{singleGuest.lastName}</td>
+            <td>
+              <input
+                type="checkbox"
+                value={isAttending}
+                defaultChecked={isAttending}
+                onChange={() => {
+                  setIsAttending(
+                    isAttending ? (
+                      <div>attending</div>
+                    ) : (
+                      <div>not attending</div>
+                    ),
+                  );
+                }}
+              />
+            </td>
             <td>
               <input
                 type="checkbox"
@@ -100,17 +108,13 @@ export default function MainGuestList() {
                 }}
               />
             </td>
+            <td>
+              <button onClick={() => handleDelete(singleGuest.id)}>
+                remove
+              </button>
+            </td>
           </tr>
         ))}
-        <div>
-          <button
-            type="button"
-            onClick={(singleGuest) => handleDelete(singleGuest.id)}
-            id="delete"
-          >
-            remove
-          </button>
-        </div>
       </tbody>
     </div>
   );
