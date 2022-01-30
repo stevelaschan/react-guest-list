@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-export default function GuestListInfo(props) {
+export default function GuestListInfo(guestListAddedGuest) {
   const [isAttending, setIsAttending] = useState(false);
 
   GuestListInfo.propTypes = {
@@ -14,7 +14,7 @@ export default function GuestListInfo(props) {
   return (
     <div>
       <div className="guestName" data-test-id="guest">
-        {props.name.first} {props.name.last}
+        {guestListAddedGuest.name.first} {guestListAddedGuest.name.last}
       </div>
       <br />
       <div className="guestAttending">
@@ -24,7 +24,9 @@ export default function GuestListInfo(props) {
           onChange={() => {
             setIsAttending(true);
           }}
-        />
+        >
+          not attending
+        </button>
       </div>
     </div>
   );

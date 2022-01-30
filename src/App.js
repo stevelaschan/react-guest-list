@@ -1,11 +1,11 @@
 import './App.css';
-import MainList from './MainList';
+import MainGuestList from './MainGuestList';
 
 function App() {
   return (
     <div className="App">
       <h1>Guest List</h1>
-      <MainList />
+      <MainGuestList />
     </div>
   );
 }
