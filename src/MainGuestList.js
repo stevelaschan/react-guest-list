@@ -1,7 +1,12 @@
+/** @jsxImportSource @emotion/react */
+
 import React, { useEffect, useState } from 'react';
+import { firstLastNameForm, guestListName } from './AppStyle';
 
 export default function MainGuestList() {
-  const [guestList, setGuestList] = useState([]);
+  const [guestList, setGuestList] = useState([
+    { firstName: '', lastName: '', attending: false },
+  ]);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [isAttending, setIsAttending] = useState(false);
@@ -19,11 +24,10 @@ export default function MainGuestList() {
     getList();
   }, []);
 
-  // when add guest button is clicked
+  // create a new guest
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // create a new guest
     async function newGuest() {
       const response = await fetch(
         `http://upleveled-guest-list.herokuapp.com/guests/`,
@@ -45,16 +49,25 @@ export default function MainGuestList() {
     newGuest();
   };
 
-  // set state for checkbox
-  const [checkbox, setCheckbox] = useState({});
-
-  // Object.keys() returns an array with the values of the object as strings
-  // const checkboxKeys = Object.keys(checkbox);
-
-  // when Delete button is clicked:
-  async function deleteGuest() {
+  // update guest for attending
+  async function updateGuestAttending(id) {
     const response = await fetch(
-      `http://upleveled-guest-list.herokuapp.com/guests/1`,
+      `http://upleveled-guest-list.herokuapp.com/guests/${id}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ attending: isAttending }),
+      },
+    );
+    const updatedGuest = await response.json();
+  }
+
+  // delete guest with "remove" button
+  async function deleteGuest(id) {
+    const response = await fetch(
+      `http://upleveled-guest-list.herokuapp.com/guests/${id}`,
       {
         method: 'DELETE',
       },
@@ -65,41 +78,43 @@ export default function MainGuestList() {
 
   return (
     <div>
-      <form on onSubmit={handleSubmit}>
-        First name{' '}
-        <input
-          value={firstName}
-          onInput={(e) => setFirstName(e.target.value)}
-        />
-        Last name{' '}
-        <input value={lastName} onInput={(e) => setLastName(e.target.value)} />
-        <button>add guest</button>
-      </form>
-      <tbody>
+      <div css={firstLastNameForm}>
+        <form on onSubmit={handleSubmit}>
+          <span>First name </span>
+          <input
+            value={firstName}
+            onInput={(e) => setFirstName(e.target.value)}
+            className="firstNameInput"
+          />
+          <span>Last name </span>
+          <input
+            value={lastName}
+            onInput={(e) => setLastName(e.target.value)}
+            className="lastNameInput"
+          />
+          <button className="addGuestButton">add guest</button>
+        </form>
+      </div>
+      <tbody css={guestListName}>
         {guestList.map((singleGuest) => (
           <tr key={singleGuest.id} data-test-id="guest">
-            <td>{singleGuest.firstName}</td>
-            <td>{singleGuest.lastName}</td>
+            <td className="firstNameList">{singleGuest.firstName}</td>
+            <td className="lastNameList">{singleGuest.lastName}</td>
             <td>
               <input
+                className="attendingCheckBoxList"
                 type="checkbox"
                 value={isAttending}
                 defaultChecked={isAttending}
-                onChange={() => {
-                  setIsAttending(!isAttending);
-                }}
+                aria-label="attending"
+                onChange={() =>
+                  setIsAttending(!isAttending)(
+                    updateGuestAttending(singleGuest.id),
+                  )
+                }
               />
-              {!isAttending ? <div>attending</div> : <div>not attending</div>}
+              attending
             </td>
-            {/* <td>
-              <input
-                type="checkbox"
-                defaultChecked={checkbox[singleGuest.id]}
-                onChange={() => {
-                  setCheckbox({ ...checkbox, [singleGuest.id]: true });
-                }}
-              />
-            </td> */}
             <td>
               <button onClick={() => deleteGuest(singleGuest.id)}>
                 remove
