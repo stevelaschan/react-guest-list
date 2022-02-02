@@ -62,11 +62,11 @@ export default function MainGuestList() {
 
   // on change update guest for attending
   async function onChangeAttending(id, attendingVariable) {
-    const copyGuests = [...guestList];
-    const guestFind = copyGuests.find((g) => g.id === id);
+    const copyGuestList = [...guestList];
+    const guestFind = copyGuestList.find((guest) => guest.id === id);
     guestFind.attending = attendingVariable;
     await updateGuestAttending(guestFind);
-    setGuestList(copyGuests);
+    setGuestList(copyGuestList);
   }
 
   // delete guest with "remove" button from api
@@ -107,9 +107,8 @@ export default function MainGuestList() {
                   {guest.firstName.toUpperCase()}
                 </td>
                 <td className="lastNameList">{guest.lastName.toUpperCase()}</td>
-                <td>
+                <td className="attendingCheckBoxList">
                   <input
-                    className="attendingCheckBoxList"
                     type="checkbox"
                     value={guest.attending}
                     aria-label="attending"
@@ -121,7 +120,7 @@ export default function MainGuestList() {
                     {guest.attending ? 'attending' : ' not attending'}
                   </span>
                   {/* {JSON.stringify(guest.attending)} */}
-                  {console.log(guest.attending)}
+                  {/* {console.log(guest.attending)} */}
                 </td>
                 <td>
                   <button

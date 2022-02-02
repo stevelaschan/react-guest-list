@@ -10,7 +10,7 @@ ReactDOM.render(
       styles={css`
         * {
           box-sizing: border-box;
-          font-family: sans-serif;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
           color: #ecefed;
           background-color: #808080;
         }
