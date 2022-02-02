@@ -7,6 +7,7 @@ export default function MainGuestList() {
   const [guestList, setGuestList] = useState([]);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // fetch guest info from the api
   useEffect(() => {
@@ -16,10 +17,13 @@ export default function MainGuestList() {
       );
       const data = await response.json();
       setGuestList(data);
+      setLoading(true);
     };
 
     getList();
   }, []);
+
+  const screenIsLoading = loading ? false : true;
 
   // create a new guest
   const handleSubmit = (e) => {
@@ -57,13 +61,13 @@ export default function MainGuestList() {
   }
 
   // on change update guest for attending
-  const onChangeAttending = (id, attendingVariable) => {
+  async function onChangeAttending(id, attendingVariable) {
     const copyGuests = [...guestList];
     const guestFind = copyGuests.find((g) => g.id === id);
     guestFind.attending = attendingVariable;
-    updateGuestAttending(guestFind);
+    await updateGuestAttending(guestFind);
     setGuestList(copyGuests);
-  };
+  }
 
   // delete guest with "remove" button from api
   async function deleteGuest(id) {
@@ -82,12 +86,14 @@ export default function MainGuestList() {
             value={firstName}
             onInput={(e) => setFirstName(e.target.value)}
             className="firstNameInput"
+            disabled={screenIsLoading}
           />
           <span>Last name </span>
           <input
             value={lastName}
             onInput={(e) => setLastName(e.target.value)}
             className="lastNameInput"
+            disabled={screenIsLoading}
           />
           <button className="addGuestButton">add guest</button>
         </form>
