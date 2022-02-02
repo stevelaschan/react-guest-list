@@ -81,20 +81,24 @@ export default function MainGuestList() {
     <div>
       <div css={firstLastNameForm}>
         <form onSubmit={handleSubmit}>
-          <span>First name </span>
-          <input
-            value={firstName}
-            onInput={(e) => setFirstName(e.target.value)}
-            className="firstNameInput"
-            disabled={screenIsLoading}
-          />
-          <span>Last name </span>
-          <input
-            value={lastName}
-            onInput={(e) => setLastName(e.target.value)}
-            className="lastNameInput"
-            disabled={screenIsLoading}
-          />
+          <div>
+            <span>First name </span>
+            <input
+              value={firstName}
+              onInput={(e) => setFirstName(e.target.value)}
+              className="firstNameInput"
+              disabled={screenIsLoading}
+            />
+          </div>
+          <div>
+            <span>Last name </span>
+            <input
+              value={lastName}
+              onInput={(e) => setLastName(e.target.value)}
+              className="lastNameInput"
+              disabled={screenIsLoading}
+            />
+          </div>
           <button className="addGuestButton">add guest</button>
         </form>
       </div>

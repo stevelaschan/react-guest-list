@@ -9,15 +9,20 @@ export const firstLastNameForm = css`
 
   form {
     width: auto;
-    margin: 64px 50px 16px 50px;
+    margin: 50px 50px 16px 50px;
     border-radius: 16px;
     background-color: #424242;
-    padding: 32px;
+    padding: 32px 32px 16px 32px;
+  }
+
+  div {
+    background-color: #424242;
   }
 
   span {
     font-size: 24px;
-    margin-left: 32px;
+    margin-right: 24px;
+    margin-left: 24px;
     background-color: #424242;
   }
 
@@ -26,6 +31,7 @@ export const firstLastNameForm = css`
     border-radius: 8px;
     margin: 8px;
     padding: 4px;
+    background-color: #2e2e2e;
   }
 
   .lastNameInput {
@@ -33,16 +39,18 @@ export const firstLastNameForm = css`
     border-radius: 8px;
     margin: 8px;
     padding: 4px;
+    background-color: #2e2e2e;
   }
 
   .addGuestButton {
     font-size: 16px;
     border-radius: 14px;
-    margin: 8px;
+    margin: 20px 8px 8px 8px;
     padding: 12px;
-    background-color: black;
+    background-color: #2e2e2e;
     box-shadow: 0 5px 12px 2px rgba(0, 0, 0, 0.15);
     transform: translate3d(0, -3px, 5px);
+    font-weight: 500;
   }
 
   .addGuestButton:focus {
@@ -87,7 +95,7 @@ export const guestListStyle = css`
   .attendingCheckBoxList {
     border-radius: 8px;
     margin-left: 16px;
-    margin-top: 4px;
+    margin-top: 6px;
   }
 
   span {
@@ -100,8 +108,7 @@ export const guestListStyle = css`
     padding: 6px 8px 6px 8px;
     margin: 0px 8px 0px 8px;
     border-radius: 8px;
-    color: black;
-    background-color: #ecefed;
+    background-color: #2e2e2e;
     font-size: 14px;
     font-weight: 500;
   }
