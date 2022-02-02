@@ -11,7 +11,7 @@ ReactDOM.render(
         * {
           box-sizing: border-box;
           font-family: sans-serif;
-          color: white;
+          color: #ecefed;
           background-color: #808080;
         }
       `}

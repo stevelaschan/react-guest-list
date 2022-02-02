@@ -2,27 +2,59 @@
 
 import { css } from '@emotion/react';
 
-export const guestListName = css`
-  display: grid;
-  justify-content: space-evenly;
+export const guestListStyle = css`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   align-items: center;
-  margin: auto;
-  padding: auto;
+  padding: 8px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
   .firstNameList {
-    font-size: 16px;
-    padding-left: 12px;
-    padding-right: 12px;
+    font-size: 20px;
+    padding-left: auto;
+    padding-right: 0.2rem;
+    font-weight: bold;
   }
 
   .lastNameList {
-    font-size: 16px;
-    padding-left: 12px;
-    padding-right: 12px;
+    font-size: 20px;
+    padding-right: auto;
+    padding-left: 0.2rem;
+    font-weight: bold;
   }
 
   .attendingCheckBoxList {
     border-radius: 8px;
+    margin-left: 16px;
+  }
+
+  span {
+    font-size: 16px;
+  }
+
+  .deleteButton {
+    display: flex;
+    padding: 6px 8px 6px 8px;
+    margin: 0px 8px 0px 8px;
+    border-radius: 8px;
+    color: black;
+    background-color: #ecefed;
+    font-size: 14px;
+  }
+
+  .deleteButton:hover {
+    cursor: pointer;
+  }
+
+  div {
+    display: flex;
+    border: 2px solid white;
+    border-radius: 8px;
+    margin: 18px;
+    padding: 18px 14px;
+    width: 450px;
+    justify-content: space-evenly;
   }
 `;
 
@@ -41,14 +73,14 @@ export const firstLastNameForm = css`
 
   .firstNameInput {
     font-size: 16px;
-    border-radius: 4px;
+    border-radius: 8px;
     margin: 8px;
     padding: 4px;
   }
 
   .lastNameInput {
     font-size: 16px;
-    border-radius: 4px;
+    border-radius: 8px;
     margin: 8px;
     padding: 4px;
   }

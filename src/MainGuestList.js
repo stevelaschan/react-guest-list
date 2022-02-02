@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import React, { useEffect, useState } from 'react';
-import { firstLastNameForm, guestListName } from './AppStyle';
+import { firstLastNameForm, guestListStyle } from './AppStyle';
 
 export default function MainGuestList() {
   const [guestList, setGuestList] = useState([]);
@@ -42,18 +42,30 @@ export default function MainGuestList() {
     newGuest();
   };
 
-  // update guest for attending
-  async function updateGuestAttending(id, attending) {
-    await fetch(`http://upleveled-guest-list.herokuapp.com/guests/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
+  // update guest for attending in the api
+  async function updateGuestAttending(guest) {
+    await fetch(
+      `http://upleveled-guest-list.herokuapp.com/guests/${guest.id}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ attending: guest.attending }),
       },
-      body: JSON.stringify({ attending: !attending }),
-    });
+    );
   }
 
-  // delete guest with "remove" button
+  // on change update guest for attending
+  const onChangeAttending = (id, attendingVariable) => {
+    const copyGuests = [...guestList];
+    const guestFind = copyGuests.find((g) => g.id === id);
+    guestFind.attending = attendingVariable;
+    updateGuestAttending(guestFind);
+    setGuestList(copyGuests);
+  };
+
+  // delete guest with "remove" button from api
   async function deleteGuest(id) {
     await fetch(`http://upleveled-guest-list.herokuapp.com/guests/${id}`, {
       method: 'DELETE',
@@ -81,32 +93,39 @@ export default function MainGuestList() {
         </form>
       </div>
       <table>
-        <tbody css={guestListName}>
+        <tbody css={guestListStyle}>
           {guestList.map((guest) => (
             <tr key={guest.id} data-test-id="guest">
-              <td className="firstNameList">{guest.firstName}</td>
-              <td className="lastNameList">{guest.lastName}</td>
-              <td>
-                <label>
+              <div>
+                <td className="firstNameList">
+                  {guest.firstName.toUpperCase()}
+                </td>
+                <td className="lastNameList">{guest.lastName.toUpperCase()}</td>
+                <td>
                   <input
                     className="attendingCheckBoxList"
                     type="checkbox"
                     value={guest.attending}
                     aria-label="attending"
-                    onChange={
-                      () => updateGuestAttending(guest.id, guest.attending)
-                      // !guest.attending
-                      //   ? updateGuestAttending(guest.id, guest.attending)
-                      //   : updateGuestAttending(guest.id, !guest.attending)
+                    onChange={(e) =>
+                      onChangeAttending(guest.id, e.currentTarget.checked)
                     }
                   />{' '}
-                  {/* {guest.attending ? 'attending' : ' not attending'} */}
-                  {JSON.stringify(guest.attending)}
-                </label>
-              </td>
-              <td>
-                <button onClick={() => deleteGuest(guest.id)}>remove</button>
-              </td>
+                  <span>
+                    {guest.attending ? 'attending' : ' not attending'}
+                  </span>
+                  {/* {JSON.stringify(guest.attending)} */}
+                  {console.log(guest.attending)}
+                </td>
+                <td>
+                  <button
+                    className="deleteButton"
+                    onClick={() => deleteGuest(guest.id)}
+                  >
+                    remove
+                  </button>
+                </td>
+              </div>
             </tr>
           ))}
         </tbody>
