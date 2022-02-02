@@ -4,12 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { firstLastNameForm, guestListName } from './AppStyle';
 
 export default function MainGuestList() {
-  const [guestList, setGuestList] = useState([
-    { firstName: '', lastName: '', attending: false },
-  ]);
+  const [guestList, setGuestList] = useState([]);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [isAttending, setIsAttending] = useState(false);
 
   // fetch guest info from the api
   useEffect(() => {
@@ -29,20 +26,16 @@ export default function MainGuestList() {
     e.preventDefault();
 
     async function newGuest() {
-      const response = await fetch(
-        `http://upleveled-guest-list.herokuapp.com/guests/`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            firstName: firstName,
-            lastName: lastName,
-          }),
+      await fetch(`http://upleveled-guest-list.herokuapp.com/guests/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      );
-      const createdGuest = await response.json();
+        body: JSON.stringify({
+          firstName: firstName,
+          lastName: lastName,
+        }),
+      });
       window.location.reload(false);
     }
 
@@ -50,36 +43,28 @@ export default function MainGuestList() {
   };
 
   // update guest for attending
-  async function updateGuestAttending(id) {
-    const response = await fetch(
-      `http://upleveled-guest-list.herokuapp.com/guests/${id}`,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ attending: isAttending }),
+  async function updateGuestAttending(id, attending) {
+    await fetch(`http://upleveled-guest-list.herokuapp.com/guests/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    );
-    const updatedGuest = await response.json();
+      body: JSON.stringify({ attending: !attending }),
+    });
   }
 
   // delete guest with "remove" button
   async function deleteGuest(id) {
-    const response = await fetch(
-      `http://upleveled-guest-list.herokuapp.com/guests/${id}`,
-      {
-        method: 'DELETE',
-      },
-    );
-    const deletedGuest = await response.json();
+    await fetch(`http://upleveled-guest-list.herokuapp.com/guests/${id}`, {
+      method: 'DELETE',
+    });
     window.location.reload(false);
   }
 
   return (
     <div>
       <div css={firstLastNameForm}>
-        <form on onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <span>First name </span>
           <input
             value={firstName}
@@ -95,34 +80,37 @@ export default function MainGuestList() {
           <button className="addGuestButton">add guest</button>
         </form>
       </div>
-      <tbody css={guestListName}>
-        {guestList.map((singleGuest) => (
-          <tr key={singleGuest.id} data-test-id="guest">
-            <td className="firstNameList">{singleGuest.firstName}</td>
-            <td className="lastNameList">{singleGuest.lastName}</td>
-            <td>
-              <input
-                className="attendingCheckBoxList"
-                type="checkbox"
-                value={isAttending}
-                defaultChecked={isAttending}
-                aria-label="attending"
-                onChange={() =>
-                  setIsAttending(!isAttending)(
-                    updateGuestAttending(singleGuest.id),
-                  )
-                }
-              />
-              attending
-            </td>
-            <td>
-              <button onClick={() => deleteGuest(singleGuest.id)}>
-                remove
-              </button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
+      <table>
+        <tbody css={guestListName}>
+          {guestList.map((guest) => (
+            <tr key={guest.id} data-test-id="guest">
+              <td className="firstNameList">{guest.firstName}</td>
+              <td className="lastNameList">{guest.lastName}</td>
+              <td>
+                <label>
+                  <input
+                    className="attendingCheckBoxList"
+                    type="checkbox"
+                    value={guest.attending}
+                    aria-label="attending"
+                    onChange={
+                      () => updateGuestAttending(guest.id, guest.attending)
+                      // !guest.attending
+                      //   ? updateGuestAttending(guest.id, guest.attending)
+                      //   : updateGuestAttending(guest.id, !guest.attending)
+                    }
+                  />{' '}
+                  {/* {guest.attending ? 'attending' : ' not attending'} */}
+                  {JSON.stringify(guest.attending)}
+                </label>
+              </td>
+              <td>
+                <button onClick={() => deleteGuest(guest.id)}>remove</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
