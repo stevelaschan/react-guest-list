@@ -8,13 +8,12 @@ export default function MainGuestList() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [loading, setLoading] = useState(true);
+  const baseUrl = `http://upleveled-guest-list.herokuapp.com`;
 
   // fetch guest data from the api
   useEffect(() => {
     const getList = async () => {
-      const response = await fetch(
-        `http://upleveled-guest-list.herokuapp.com/guests/`,
-      );
+      const response = await fetch(`${baseUrl}/guests/`);
       const data = await response.json();
       setGuestList(data);
       setLoading(true);
@@ -30,7 +29,7 @@ export default function MainGuestList() {
     e.preventDefault();
 
     async function newGuest() {
-      await fetch(`http://upleveled-guest-list.herokuapp.com/guests/`, {
+      await fetch(`${baseUrl}/guests/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -48,16 +47,13 @@ export default function MainGuestList() {
 
   // update guest for attending
   async function updateGuestAttending(guest) {
-    await fetch(
-      `http://upleveled-guest-list.herokuapp.com/guests/${guest.id}`,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ attending: guest.attending }),
+    await fetch(`${baseUrl}/guests/${guest.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    );
+      body: JSON.stringify({ attending: guest.attending }),
+    });
   }
 
   // on change update guest for attending
@@ -71,7 +67,7 @@ export default function MainGuestList() {
 
   // delete guest with "remove" button
   async function deleteGuest(id) {
-    await fetch(`http://upleveled-guest-list.herokuapp.com/guests/${id}`, {
+    await fetch(`${baseUrl}/guests/${id}`, {
       method: 'DELETE',
     });
     window.location.reload(false);
