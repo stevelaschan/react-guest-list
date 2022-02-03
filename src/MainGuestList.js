@@ -7,9 +7,9 @@ export default function MainGuestList() {
   const [guestList, setGuestList] = useState([]);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // fetch guest info from the api
+  // fetch guest data from the api
   useEffect(() => {
     const getList = async () => {
       const response = await fetch(
@@ -46,7 +46,7 @@ export default function MainGuestList() {
     newGuest();
   };
 
-  // update guest for attending in the api
+  // update guest for attending
   async function updateGuestAttending(guest) {
     await fetch(
       `http://upleveled-guest-list.herokuapp.com/guests/${guest.id}`,
@@ -69,13 +69,27 @@ export default function MainGuestList() {
     setGuestList(copyGuestList);
   }
 
-  // delete guest with "remove" button from api
+  // delete guest with "remove" button
   async function deleteGuest(id) {
     await fetch(`http://upleveled-guest-list.herokuapp.com/guests/${id}`, {
       method: 'DELETE',
     });
     window.location.reload(false);
   }
+
+  // delete all guests from api
+  // async function deleteAllGuests(guest) {
+  //   for (guest of guestList) {
+  //     await fetch(
+  //       `http://upleveled-guest-list.herokuapp.com/guests/${guest.id}`,
+  //       {
+  //         method: 'DELETE',
+  //       },
+  //     );
+  //   }
+  //   window.location.reload(false);
+  //   setGuestList([]);
+  // }
 
   return (
     <div>
@@ -87,7 +101,7 @@ export default function MainGuestList() {
               value={firstName}
               onInput={(e) => setFirstName(e.target.value)}
               className="firstNameInput"
-              disabled={screenIsLoading}
+              // disabled={screenIsLoading}
             />
           </div>
           <div>
@@ -96,12 +110,25 @@ export default function MainGuestList() {
               value={lastName}
               onInput={(e) => setLastName(e.target.value)}
               className="lastNameInput"
-              disabled={screenIsLoading}
+              // disabled={screenIsLoading}
             />
           </div>
           <button className="addGuestButton">add guest</button>
         </form>
       </div>
+      {/* <div>
+        <form>
+          {guestList.map((guest) => (
+            <button
+              key={guest.id}
+              className="deleteButton"
+              onClick={deleteAllGuests(guest.id)}
+            >
+              remove all
+            </button>
+          ))}
+        </form>
+      </div> */}
       <table>
         <tbody css={guestListStyle}>
           {guestList.map((guest) => (
