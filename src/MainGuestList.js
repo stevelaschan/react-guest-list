@@ -40,6 +40,7 @@ export default function MainGuestList() {
           lastName: lastName,
         }),
       });
+      // eslint-disable-next-line no-restricted-syntax
       window.location.reload(false);
     }
 
@@ -71,6 +72,7 @@ export default function MainGuestList() {
     await fetch(`${baseUrl}/guests/${id}`, {
       method: 'DELETE',
     });
+    // eslint-disable-next-line no-restricted-syntax
     window.location.reload(false);
   }
 
