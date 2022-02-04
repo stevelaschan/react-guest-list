@@ -8,7 +8,7 @@ export default function MainGuestList() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [loading, setLoading] = useState(true);
-  const baseUrl = `http://upleveled-guest-list.herokuapp.com`;
+  const baseUrl = `https://upleveled-guest-list.herokuapp.com`;
 
   // fetch guest data from the api
   useEffect(() => {
