@@ -13,16 +13,17 @@ export default function MainGuestList() {
   // fetch guest data from the api
   useEffect(() => {
     const getList = async () => {
+      setLoading(true);
       const response = await fetch(`${baseUrl}/guests/`);
       const data = await response.json();
       setGuestList(data);
-      setLoading(true);
+      setLoading(() => false);
     };
 
-    getList();
-  }, []);
+    getList().catch((error) => console.log('get all guests error:' + error));
+  }, [baseUrl]);
 
-  const screenIsLoading = loading ? false : true;
+  // const screenIsLoading = loading ? false : true;
 
   // create a new guest
   const handleSubmit = (e) => {
@@ -42,7 +43,7 @@ export default function MainGuestList() {
       window.location.reload(false);
     }
 
-    newGuest();
+    newGuest().catch((error) => console.log('create new guest:' + error));
   };
 
   // update guest for attending
@@ -90,27 +91,31 @@ export default function MainGuestList() {
   return (
     <div>
       <div css={firstLastNameForm}>
-        <form onSubmit={handleSubmit}>
-          <div>
-            <span>First name </span>
-            <input
-              value={firstName}
-              onInput={(e) => setFirstName(e.target.value)}
-              className="firstNameInput"
-              // disabled={screenIsLoading}
-            />
-          </div>
-          <div>
-            <span>Last name </span>
-            <input
-              value={lastName}
-              onInput={(e) => setLastName(e.target.value)}
-              className="lastNameInput"
-              // disabled={screenIsLoading}
-            />
-          </div>
-          <button className="addGuestButton">add guest</button>
-        </form>
+        {loading ? (
+          'Loading...'
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <div>
+              <span>First name </span>
+              <input
+                value={firstName}
+                onInput={(e) => setFirstName(e.target.value)}
+                className="firstNameInput"
+                // disabled={screenIsLoading}
+              />
+            </div>
+            <div>
+              <span>Last name </span>
+              <input
+                value={lastName}
+                onInput={(e) => setLastName(e.target.value)}
+                className="lastNameInput"
+                // disabled={screenIsLoading}
+              />
+            </div>
+            <button className="addGuestButton">add guest</button>
+          </form>
+        )}
       </div>
       {/* <div>
         <form>
@@ -146,8 +151,6 @@ export default function MainGuestList() {
                   <span>
                     {guest.attending ? 'attending' : ' not attending'}
                   </span>
-                  {/* {JSON.stringify(guest.attending)} */}
-                  {/* {console.log(guest.attending)} */}
                 </td>
                 <td>
                   <button
