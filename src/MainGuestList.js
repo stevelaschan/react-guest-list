@@ -40,7 +40,7 @@ export default function MainGuestList() {
           lastName: lastName,
         }),
       });
-      // window.location.reload(false);
+      window.location.reload(false);
     }
 
     newGuest().catch((error) => console.log('create new guest:' + error));
@@ -71,7 +71,7 @@ export default function MainGuestList() {
     await fetch(`${baseUrl}/guests/${id}`, {
       method: 'DELETE',
     });
-    // window.location.reload(false);
+    window.location.reload(false);
   }
 
   // delete all guests from api
