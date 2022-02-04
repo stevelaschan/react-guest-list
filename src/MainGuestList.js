@@ -103,6 +103,7 @@ export default function MainGuestList() {
                 value={firstName}
                 onInput={(e) => setFirstName(e.target.value)}
                 className="firstNameInput"
+                aria-label="First name input"
                 // disabled={screenIsLoading}
               />
             </div>
@@ -112,6 +113,7 @@ export default function MainGuestList() {
                 value={lastName}
                 onInput={(e) => setLastName(e.target.value)}
                 className="lastNameInput"
+                aria-label="Lirst name input"
                 // disabled={screenIsLoading}
               />
             </div>
