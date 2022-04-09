@@ -30,7 +30,7 @@ export default function MainGuestList() {
     e.preventDefault();
 
     async function newGuest() {
-      await fetch(`${baseUrl}/guests/`, {
+      const response = await fetch(`${baseUrl}/guests/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -40,11 +40,13 @@ export default function MainGuestList() {
           lastName: lastName,
         }),
       });
-      // eslint-disable-next-line no-restricted-syntax
-      window.location.reload(false);
+      const createdGuest = await response.json();
+      setGuestList([...guestList, createdGuest]);
     }
 
     newGuest().catch((error) => console.log('create new guest:' + error));
+    setFirstName('');
+    setLastName('');
   };
 
   // update guest for attending
@@ -69,26 +71,23 @@ export default function MainGuestList() {
 
   // delete guest with "remove" button
   async function deleteGuest(id) {
-    await fetch(`${baseUrl}/guests/${id}`, {
+    const response = await fetch(`${baseUrl}/guests/${id}`, {
       method: 'DELETE',
     });
-    // eslint-disable-next-line no-restricted-syntax
-    window.location.reload(false);
+    const deletedGuest = await response.json();
+    const newList = guestList.filter((guest) => guest.id !== deletedGuest.id);
+    setGuestList([...newList]);
   }
 
   // delete all guests from api
-  // async function deleteAllGuests(guest) {
-  //   for (guest of guestList) {
-  //     await fetch(
-  //       `http://upleveled-guest-list.herokuapp.com/guests/${guest.id}`,
-  //       {
-  //         method: 'DELETE',
-  //       },
-  //     );
-  //   }
-  //   window.location.reload(false);
-  //   setGuestList([]);
-  // }
+  async function deleteAllGuests() {
+    for (const guest of guestList) {
+      await fetch(`${baseUrl}/guests/${guest.id}`, {
+        method: 'DELETE',
+      });
+    }
+    setGuestList([]);
+  }
 
   return (
     <div>
@@ -118,31 +117,22 @@ export default function MainGuestList() {
               />
             </div>
             <button className="addGuestButton">add guest</button>
-          </form>
-        )}
-      </div>
-      {/* <div>
-        <form>
-          {guestList.map((guest) => (
             <button
-              key={guest.id}
-              className="deleteButton"
-              onClick={deleteAllGuests(guest.id)}
+              className="deleteGuestsButton"
+              onClick={() => deleteAllGuests()}
             >
               remove all
             </button>
-          ))}
-        </form>
-      </div> */}
+          </form>
+        )}
+      </div>
       <table>
         <tbody css={guestListStyle}>
           {guestList.map((guest) => (
             <tr key={guest.id} data-test-id="guest">
-              <div>
-                <td className="firstNameList">
-                  {guest.firstName.toUpperCase()}
-                </td>
-                <td className="lastNameList">{guest.lastName.toUpperCase()}</td>
+              <div key={guest.id}>
+                <td className="firstNameList">{guest.firstName}</td>
+                <td className="lastNameList">{guest.lastName}</td>
                 <td className="attendingCheckBoxList">
                   <input
                     type="checkbox"

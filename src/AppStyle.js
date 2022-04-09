@@ -62,6 +62,26 @@ export const firstLastNameForm = css`
     transform: translate3d(0, 0, 0);
     box-shadow: none;
   }
+  .deleteGuestsButton {
+    font-size: 16px;
+    border-radius: 14px;
+    margin: 20px 8px 8px 8px;
+    padding: 12px;
+    background-color: #2e2e2e;
+    box-shadow: 0 5px 12px 2px rgba(0, 0, 0, 0.15);
+    transform: translate3d(0, -3px, 5px);
+    font-weight: 500;
+  }
+
+  .deleteGuestsButton:focus {
+    outline: none;
+  }
+
+  .deleteGuestsButton:hover {
+    cursor: pointer;
+    transform: translate3d(0, 0, 0);
+    box-shadow: none;
+  }
 `;
 
 export const guestListStyle = css`
