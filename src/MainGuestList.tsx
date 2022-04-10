@@ -3,11 +3,18 @@
 import React, { useEffect, useState } from 'react';
 import { firstLastNameForm, guestListStyle } from './AppStyle';
 
+type Guest = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  attending: boolean;
+};
+
 export default function MainGuestList() {
-  const [guestList, setGuestList] = useState([]);
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [guestList, setGuestList] = useState<Guest[] | undefined>([]);
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(true);
   const baseUrl = `https://upleveled-guest-list.herokuapp.com`;
 
   // fetch guest data from the api
@@ -26,7 +33,7 @@ export default function MainGuestList() {
   // const screenIsLoading = loading ? false : true;
 
   // create a new guest
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
 
     async function newGuest() {
@@ -41,7 +48,7 @@ export default function MainGuestList() {
         }),
       });
       const createdGuest = await response.json();
-      setGuestList([...guestList, createdGuest]);
+      setGuestList([...(!guestList ? [] : guestList), createdGuest]);
     }
 
     newGuest().catch((error) => console.log('create new guest:' + error));
@@ -50,7 +57,7 @@ export default function MainGuestList() {
   };
 
   // update guest for attending
-  async function updateGuestAttending(guest) {
+  async function updateGuestAttending(guest: Guest) {
     await fetch(`${baseUrl}/guests/${guest.id}`, {
       method: 'PUT',
       headers: {
@@ -61,26 +68,35 @@ export default function MainGuestList() {
   }
 
   // on change update guest for attending
-  async function onChangeAttending(id, attendingVariable) {
-    const copyGuestList = [...guestList];
+  async function onChangeAttending(id: number, attendingVariable: boolean) {
+    const copyGuestList = [...(!guestList ? [] : guestList)];
     const guestFind = copyGuestList.find((guest) => guest.id === id);
+    if (!guestFind) {
+      return;
+    }
     guestFind.attending = attendingVariable;
     await updateGuestAttending(guestFind);
     setGuestList(copyGuestList);
   }
 
   // delete guest with "remove" button
-  async function deleteGuest(id) {
+  async function deleteGuest(id: number) {
     const response = await fetch(`${baseUrl}/guests/${id}`, {
       method: 'DELETE',
     });
     const deletedGuest = await response.json();
+    if (!guestList) {
+      return;
+    }
     const newList = guestList.filter((guest) => guest.id !== deletedGuest.id);
     setGuestList([...newList]);
   }
 
   // delete all guests from api
   async function deleteAllGuests() {
+    if (!guestList) {
+      return;
+    }
     for (const guest of guestList) {
       await fetch(`${baseUrl}/guests/${guest.id}`, {
         method: 'DELETE',
@@ -100,7 +116,7 @@ export default function MainGuestList() {
               <span>First name </span>
               <input
                 value={firstName}
-                onInput={(e) => setFirstName(e.target.value)}
+                onInput={(e: any) => setFirstName(e.target.value)}
                 className="firstNameInput"
                 aria-label="First name input"
                 // disabled={screenIsLoading}
@@ -110,7 +126,7 @@ export default function MainGuestList() {
               <span>Last name </span>
               <input
                 value={lastName}
-                onInput={(e) => setLastName(e.target.value)}
+                onInput={(e: any) => setLastName(e.target.value)}
                 className="lastNameInput"
                 aria-label="Lirst name input"
                 // disabled={screenIsLoading}
@@ -128,35 +144,39 @@ export default function MainGuestList() {
       </div>
       <table>
         <tbody css={guestListStyle}>
-          {guestList.map((guest) => (
-            <tr key={guest.id} data-test-id="guest">
-              <div key={guest.id}>
-                <td className="firstNameList">{guest.firstName}</td>
-                <td className="lastNameList">{guest.lastName}</td>
-                <td className="attendingCheckBoxList">
-                  <input
-                    type="checkbox"
-                    value={guest.attending}
-                    aria-label="attending"
-                    onChange={(e) =>
-                      onChangeAttending(guest.id, e.currentTarget.checked)
-                    }
-                  />{' '}
-                  <span>
-                    {guest.attending ? 'attending' : ' not attending'}
-                  </span>
-                </td>
-                <td>
-                  <button
-                    className="deleteButton"
-                    onClick={() => deleteGuest(guest.id)}
-                  >
-                    remove
-                  </button>
-                </td>
-              </div>
-            </tr>
-          ))}
+          {!guestList ? (
+            <div>Please Add Guests</div>
+          ) : (
+            guestList.map((guest) => (
+              <tr key={guest.id} data-test-id="guest">
+                <div key={guest.id}>
+                  <td className="firstNameList">{guest.firstName}</td>
+                  <td className="lastNameList">{guest.lastName}</td>
+                  <td className="attendingCheckBoxList">
+                    <input
+                      type="checkbox"
+                      checked={guest.attending}
+                      aria-label="attending"
+                      onChange={(e) =>
+                        onChangeAttending(guest.id, e.currentTarget.checked)
+                      }
+                    />{' '}
+                    <span>
+                      {guest.attending ? 'attending' : ' not attending'}
+                    </span>
+                  </td>
+                  <td>
+                    <button
+                      className="deleteButton"
+                      onClick={() => deleteGuest(guest.id)}
+                    >
+                      remove
+                    </button>
+                  </td>
+                </div>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>
